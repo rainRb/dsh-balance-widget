@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Account Balance",
+    "description": "Shows the DeepSeek account balance above the composer and refreshes it every 30 seconds."
+  }
+}
