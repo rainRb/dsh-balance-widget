@@ -1,6 +1,21 @@
 # DSH 余额悬浮条
 
-DeepSeek Harness 的本地 UI 插件：在输入框下方显示 DeepSeek 账户总额（充值余额 + 赠金），每 30 秒自动刷新；悬停显示与「Token 用量」同款的明细浮窗；点击打开 DeepSeek 开放平台的余额/用量页。
+DeepSeek Harness 的本地 UI 插件：在输入框下方显示 DeepSeek 账户总额（充值余额 + 赠金），每 30 秒自动刷新；悬停显示明细浮窗；点击打开 DeepSeek 开放平台的余额/用量页。
+
+![余额胶囊与同款浮窗](docs/preview.png)
+
+> 图中上方是 DSH 原生的「Token 用量」浮窗，用来对照外观；底部 `¥20.90` 是插件胶囊，金额为充值余额与赠金之和。余额浮窗复用了同一套表面、排版和定位，所以两者看起来是同一种东西。
+
+## 和原版长相接近
+
+余额浮窗不是另起一套 UI，而是直接对齐 DSH 原生「Token 用量 / 会话统计」浮窗的 `stat-dialog`：
+
+- **表面**：`--dsw-specific-menu` 背景、`--dsw-radius-lg` 圆角、`--dsw-elevation-prominent` 阴影、`--dsw-menu-backdrop-filter` 背景模糊；
+- **排版**：12px/18px 字号行高、标题 500 字重、`minmax(76px,auto)` 两列 `dl`、0.5px 分隔线、右对齐的等宽数字；
+- **定位**：和原生浮窗一样从 `@deepseek-ai/dsh-client-ui-primitives` 引入 `useAnchoredPosition`，`side: 'top'`、8px 间距、12px 视口边距；
+- **触发**：胶囊沿用输入框下方 dock 的胶囊形态（11px、圆角、`color-mix` 底色），悬停展开，鼠标移入浮窗不会消失。
+
+区别只有内容：把 Token 桶换成了充值余额、赠金、合计，并在底部多一个「查看余额明细」链接。
 
 ## 功能
 
@@ -34,7 +49,7 @@ dsh plugin --profile desktop remove @local/dsh-balance-widget
 - 余额：`ctx.remote.account.getBalance`，与「设置 → 账号」的余额卡片同源。
 - 平台链接：`ctx.remote.account.getState` 返回的 `links.usageUrl` / `topUpUrl`。
 - 渲染位置：`conversation.composer.dock` 槽位。
-- 浮窗复用 `@deepseek-ai/dsh-client-ui-primitives` 的 `useAnchoredPosition`，样式对齐 `ui-chat` 的会话统计浮窗。
+- 浮窗样式对齐 `ui-chat` 的 `stat-dialog.module.css`，定位复用 `useAnchoredPosition`。
 
 ## 文件
 
@@ -43,6 +58,7 @@ dsh plugin --profile desktop remove @local/dsh-balance-widget
 - `cordis.patch.yml`：组合包补丁
 - `locale/{en,zh}.json`：插件列表元信息
 - `icon.svg`：插件图标
+- `docs/preview.png`：README 预览图
 
 ## 已知限制
 
